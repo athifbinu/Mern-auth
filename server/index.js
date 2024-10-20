@@ -21,3 +21,15 @@ app.listen(4000, () => {
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
+
+//add midleware funtion and handle eerorr
+
+app.use((err, req, res, next) => {
+  const stateCode = err.stateCode || 500;
+  const message = err.message || "internel server error";
+  return res.status(stateCode).json({
+    success: false,
+    message,
+    stateCode,
+  });
+});
