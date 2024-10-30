@@ -28,6 +28,7 @@ export const signin = async (req, res, next) => {
     if (!ValidUser) return next(errorHandler(404, -"user not found"));
     const ValidPassowd = bycriptjs.compareSync(password, ValidUser.password);
     if (!ValidUser) return next(errorHandler(404, -"wrong credintuials"));
+    const token = jwt.sign({ id: ValidUser._id }, process.env.Jwt_Secret, {});
   } catch (error) {
     next(error);
   }
