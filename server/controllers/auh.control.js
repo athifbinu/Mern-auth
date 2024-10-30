@@ -28,7 +28,14 @@ export const signin = async (req, res, next) => {
     if (!ValidUser) return next(errorHandler(404, -"user not found"));
     const ValidPassowd = bycriptjs.compareSync(password, ValidUser.password);
     if (!ValidUser) return next(errorHandler(404, -"wrong credintuials"));
-    const token = jwt.sign({ id: ValidUser._id }, process.env.Jwt_Secret, {});
+    const token = jwt.sign({ id: ValidUser._id }, process.env.Jwt_Secret);
+    res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 3600000),
+      }) // Cookie expires in 1 hour
+      .status(200)
+      .json(ValidUser._doc);
   } catch (error) {
     next(error);
   }
